@@ -21,7 +21,7 @@ import streamlit as st
 
 st.title('Snub Nose Remenants analyzer')
 
-@st.cache
+@st.cache(hash_funcs={'_json.Scanner': hash})
 def load_data(data_path):
     #print(data_path)
     with open(data_path, "r") as file:

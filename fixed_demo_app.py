@@ -31,7 +31,7 @@ IMAGES_FOLDER = "images"
 GENERATED_FOLDER = "generated"
 
 
-
+""" 
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / 'static'
 print(STREAMLIT_STATIC_PATH)
 # We create a videos directory within the streamlit static asset directory
@@ -57,7 +57,7 @@ for experiment in os.listdir(DATA_FOLDER):
     for image in os.listdir(os.path.join(DATA_FOLDER, experiment, GENERATED_FOLDER)):
         shutil.copy(os.path.join(DATA_FOLDER, experiment, GENERATED_FOLDER, image), STATIC_GENERATED_PATH)  # For newer Python.
         pass
-
+"""
 st.set_page_config(layout="wide")
 
 experiments = {}
