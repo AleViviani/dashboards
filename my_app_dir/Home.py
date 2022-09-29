@@ -1,5 +1,6 @@
 # Streamlit libraries
 import streamlit as st
+import pandas as pd
 
 st.session_state.update(st.session_state)
 
@@ -8,6 +9,27 @@ st.set_page_config(layout="wide")
 ## Widgets and variables
 
 # Page 1
+
+tableExample=pd.DataFrame({"Colonna 1":[1,2,3],"Colonna 2":[4,5,6]})
+tableExample2=pd.DataFrame({"Colonna 1":[2,2,3],"Colonna 2":[2,2,6]})
+
+
+with st.sidebar:
+    st.table(tableExample)
+
+tableExample.append(tableExample2, ignore_index=True)
+
+with st.sidebar:
+    st.table(tableExample)
+
+"""
+for key, value in dict:
+    if key not in st.session_state:
+        st.session_state[key] = value
+"""
+
+
+
 
 if 'data_dir_names' not in st.session_state:
     st.session_state['data_dir_names'] = []

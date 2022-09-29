@@ -1,11 +1,6 @@
-# Streamlit Libraries
 import streamlit as st
-
-# File Processing Libraries
 from PIL import Image
 import json
-
-# Explore File System Libraries
 import os
 
 st.session_state.update(st.session_state)
@@ -41,6 +36,11 @@ for experiment in os.listdir(st.session_state['DATA_FOLDER']):
                 st.session_state['DATA_FOLDER'], experiment, st.session_state['METADATA_FILE'])
 
 example_experiment = st.selectbox('Choose a data folder', tuple(experiments), key="example_experiment")
+with st.sidebar:
+    st.markdown('## **Settings Recap:** ')
+    st.write('**Data Folder:** ', st.session_state['example_experiment'])
+
+
 st.session_state['EXPERIMENT_FOLDER'] = os.path.join(st.session_state['DATA_FOLDER'], example_experiment)
 
 columns = st.columns(9)
