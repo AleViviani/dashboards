@@ -1,14 +1,9 @@
-# Streamlit libraries
 import streamlit as st
-
-# File Processing Libraries
 import numpy as np
-
-# Explore File System Libraries
 import os
-
-# Visualize Data Libraries
 from PIL import Image
+
+from Sidebar import sidebar1, sidebar2
 
 st.session_state.update(st.session_state)
 
@@ -17,7 +12,11 @@ st.set_page_config(layout="wide")
 st.header('Cluster analysis')
 st.write('Visualize images of each clusters to compare them')
 
-compute_button = st.button("Compute", help="Compute clusters")
+with st.sidebar:
+    sidebar1()
+    sidebar2()
+
+compute_button = st.button("Compute")
 
 if compute_button:
     for cluster, col in zip(np.unique(st.session_state['clusters']), st.columns(np.unique(st.session_state['clusters']).size)):

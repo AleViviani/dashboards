@@ -1,24 +1,17 @@
-# Streamlit libraries
 import streamlit as st
-
-# File Processing Libraries
 import pandas as pd
 import numpy as np
 import json
-
-# Explore File System Libraries
 import os
-
-# Data Analysis Libraries
 import pacmap
 import umap
 from sklearn.decomposition import PCA
-
-# Visualize Data Libraries
 from bokeh.plotting import figure, output_file
 from bokeh.io import curdoc
 from bokeh.palettes import Category20, Category10
 from bokeh.models import HoverTool, ColumnDataSource
+
+from Sidebar import sidebar1, sidebar2
 
 st.session_state.update(st.session_state)
 
@@ -83,11 +76,14 @@ st.session_state['viz_data'] = st.session_state['train_data']
 st.session_state['clus_data'] = st.session_state['train_data']
 
 
+with st.sidebar:
+    sidebar1()
+    sidebar2()
+
 
 if compute_button:
     # Visualization
     if st.session_state['vis_pre_reduction_check']:
-        st.write('Visualization Pre-Reduction: ', st.session_state['vis_pre_reduction_method'])
         if st.session_state['vis_pre_reduction_method'] == "UMAP":
             st.session_state['reducer'] = umap.UMAP(n_neighbors = st.session_state['vis_pre_reduction_n_neighbors'],
                                 min_dist=0, n_components = st.session_state['vis_pre_reduction_components'])
@@ -97,7 +93,6 @@ if compute_button:
             st.session_state['viz_data'] = st.session_state['reducer'].fit_transform(st.session_state['viz_data'])
         
 
-    st.write('Reduction: ', st.session_state['vis_reduction_method'])
     if st.session_state['vis_reduction_method'] == "UMAP":
         st.session_state['reducer'] = umap.UMAP(n_neighbors=st.session_state['vis_reduction_UMAP_n_neighbors'],
                             min_dist=st.session_state['vis_reduction_UMAP_min_distance'], n_components=st.session_state['vis_reduction_components'])
@@ -118,7 +113,6 @@ if compute_button:
     # Clustering
     if st.session_state['clus_pre_reduction_check']:
 
-        st.write('Clustering Pre-Reduction: ', st.session_state['clus_pre_reduction_method'])
         if st.session_state['clus_pre_reduction_method'] == "UMAP":
             st.session_state['reducer'] = umap.UMAP(n_neighbors=st.session_state['clus_pre_reduction_n_neighbors'],
                                 min_dist=0, n_components=st.session_state['clus_pre_reduction_components'])
@@ -127,7 +121,6 @@ if compute_button:
             st.session_state['reducer'] = PCA(n_components=st.session_state['clus_pre_reduction_components'])
             st.session_state['clus_data'] = st.session_state['reducer'].fit_transform(st.session_state['clus_data'])
 
-    st.write('Clustering:', st.session_state['clus_method'])
 
     st.session_state['clusters'] = st.session_state['clusterer'].fit_predict(st.session_state['clus_data'])
     df_clusters = pd.DataFrame(st.session_state['clusters'])
@@ -136,7 +129,6 @@ if compute_button:
     st.session_state['df_embedding'] = st.session_state['df_embedding'].join(st.session_state['df_images_filename'])
     st.session_state['df_embedding'] = st.session_state['df_embedding'].join(df_clusters)
     st.session_state['df_embedding'] = st.session_state['df_embedding'].join(st.session_state['df_gen_paths'])
-    #st.session_state['df_embedding'] = st.session_state['df_embedding'].join(df_image_paths)
 
     csv = st.session_state['df_embedding'].drop(['image_path', 'gen_path'], axis=1)
     csv = csv.to_csv().encode('utf-8')
@@ -193,8 +185,8 @@ if compute_button:
     plot_figure.legend.background_fill_color = 'white'
     plot_figure.legend.background_fill_alpha = 0.5
 
-    # show(plot_figure)
 
+    # show(plot_figure)
     st.bokeh_chart(plot_figure, use_container_width=True)
 
     

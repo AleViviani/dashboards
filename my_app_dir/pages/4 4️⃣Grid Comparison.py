@@ -1,12 +1,9 @@
-# Streamlit libraries
 import streamlit as st
-
-# Data Analysis Libraries
 import umap
 import math
-
-# Visualize Data Libraries
 import matplotlib.pyplot as plt
+
+from Sidebar import sidebar1, sidebar2
 
 st.session_state.update(st.session_state)
 
@@ -14,10 +11,14 @@ st.set_page_config(layout="wide")
 
 st.header('Grid Comparison')
 st.write('Visualize on a grid how different settings choices impact on the clusterization')
-grid_comparison_method = st.selectbox('Reduction type', ('UMAP', 'PCA'), key="grid_comparison_method")
+grid_comparison_method = st.selectbox('Reduction type', options=("UMAP",), key="grid_comparison_method")
 
 grid_neighbors_range = st.slider('Select a range of neighbors', 5, 100, (25, 50), key="grid_neighbors_range", step=5)
 grid_dist_range = st.slider('Select a range of distance', 0.0, 0.9, (0.3, 0.6), key="grid_dist_range", step=0.1)
+
+with st.sidebar:
+    sidebar1()
+    sidebar2()
 
 compute_button = st.button("Compute", help="Compute grid and visualize")
 
@@ -46,6 +47,5 @@ if compute_button:
                 st.session_state['reducer'][:, 0], st.session_state['reducer'][:, 1], c=st.session_state['df_embedding']['clusters'], s=10, cmap='Spectral')
             axs[nrow, ncol].set_yticklabels([])
             axs[nrow, ncol].set_xticklabels([])
-            axs[nrow, ncol].set_title('n_neighbors={} '.format(
-                n) + 'min_dist={}'.format(d), fontsize=8)
+            axs[nrow, ncol].set_title('n_neighbors={} '.format(n) + 'min_dist={}'.format(d), fontsize=8)
     st.pyplot(fig)

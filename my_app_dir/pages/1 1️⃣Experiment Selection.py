@@ -3,6 +3,8 @@ from PIL import Image
 import json
 import os
 
+from Sidebar import sidebar1
+
 st.session_state.update(st.session_state)
 
 
@@ -16,11 +18,9 @@ def load_image(image):
     return img
 
 
-
-
 st.header("Experiment Selection")
 st.write("In this page you can choose which dataset will be analyzed.\
-        \nDone that, select the next page in the sidebar to configure process settings.")
+        \nThen continue by selecting the next page in the sidebar to configure process settings.")
 
 st.write("Example Datasets to use: ")
 
@@ -36,9 +36,6 @@ for experiment in os.listdir(st.session_state['DATA_FOLDER']):
                 st.session_state['DATA_FOLDER'], experiment, st.session_state['METADATA_FILE'])
 
 example_experiment = st.selectbox('Choose a data folder', tuple(experiments), key="example_experiment")
-with st.sidebar:
-    st.markdown('## **Settings Recap:** ')
-    st.write('**Data Folder:** ', st.session_state['example_experiment'])
 
 
 st.session_state['EXPERIMENT_FOLDER'] = os.path.join(st.session_state['DATA_FOLDER'], example_experiment)
@@ -83,4 +80,5 @@ with columns[8]:
     st.write("{}".format(
         experiments[example_experiment]["training"]["batch_size"]))
 
-
+with st.sidebar:
+    sidebar1()

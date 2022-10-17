@@ -2,24 +2,23 @@ import streamlit as st
 from sklearn.cluster import KMeans, DBSCAN, AffinityPropagation, AgglomerativeClustering
 import hdbscan
 
+from Sidebar import sidebar1, sidebar2
+
 st.session_state.update(st.session_state)
 
 
 st.set_page_config(layout="wide")
 
 st.header('Analysis Settings')
-st.write('In this page you can choose which methods and parameters will be used for the analysis\
-        \nDone that, select the next page in the sidebar to visualize the result')
+st.write('In this page you can choose which methods and parameters will be used for the analysis.\
+        \nThen continue by selecting the next page in the sidebar to visualize the result.')
 
-with st.sidebar:
-    sidebar_container = st.container()
 
 visualization_tab, clustering_tab, info_tab = st.tabs(["Visualization", "Clustering", "Info"])
 
 with visualization_tab:
 
     st.markdown("<h3 style='text-align: center; color: grey;'>Visualization Pipeline</h3>", unsafe_allow_html=True)
-    sidebar_container.write('**Visualization:** ')
 
     pre_reduction_vis_column, reduction_column = st.columns(2)
 
@@ -38,21 +37,15 @@ with visualization_tab:
         vis_pre_reduction_components = st.slider(
             'Output dimensions', key="vis_pre_reduction_components", step=1, min_value=4, max_value=32, value=5, disabled=not(st.session_state['vis_pre_reduction_check']))
 
-        if vis_pre_reduction_check:
-            sidebar_container.write('**Pre-Reduction: ** ', vis_pre_reduction_method)
-            sidebar_container.write('**Output dimensions: ** ', vis_pre_reduction_components)
             
         if vis_pre_reduction_method == "UMAP":
             vis_pre_reduction_n_neighbors = st.slider(
                 'Number of neighbors', key="vis_pre_reduction_n_neighbors", step=5, min_value=5, max_value=100, value=15, disabled=not(st.session_state['vis_pre_reduction_check']))
-            sidebar_container.write('**Number of neighbors: ** ', vis_pre_reduction_n_neighbors)
 
         elif vis_pre_reduction_method == "PCA":
             st.write('No more parameters for PCA')
 
                 
-
-
 
     with reduction_column:
         st.markdown('##### Reduction Options:')
@@ -128,8 +121,7 @@ with clustering_tab:
         elif clus_method == "dbscan":
             eps = st.slider('Eps', key="eps", step=0.05, min_value=0.0, max_value=1.0, value=0.1)
             dbscan_min_samples = st.slider('Min samples', key="dbscan_min_samples", step=1, min_value=2, max_value=50, value=5)
-            clusterer = DBSCAN(
-                eps=eps, min_samples=dbscan_min_samples, metric='euclidean')   #???????????
+            clusterer = DBSCAN(eps=eps, min_samples=dbscan_min_samples, metric='euclidean') 
 
         elif clus_method == "hdbscan":
             hdbscan_min_cluster_size = st.slider(
@@ -149,4 +141,9 @@ with clustering_tab:
 
 
 with info_tab:
-    st.write('Select which operations execute on the dataset between the options available')
+    st.write('Select which operations execute on the dataset between the options available.')
+
+
+with st.sidebar:
+    sidebar1()
+    sidebar2()
